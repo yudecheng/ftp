@@ -91,7 +91,7 @@ func Dial(addr string, options ...DialOption) (*ServerConn, error) {
 		if do.dialFunc != nil {
 			tconn, err = do.dialFunc("tcp", addr)
 		} else if do.tlsConfig != nil {
-			tconn, err = tls.DialWithDialer(&do.dialer , "tcp", addr, do.tlsConfig)
+			tconn, err = tls.DialWithDialer(&do.dialer, "tcp", addr, do.tlsConfig)
 		} else {
 			ctx := do.context
 
@@ -188,7 +188,7 @@ func DialWithContext(ctx context.Context) DialOption {
 }
 
 // DialWithTLS returns a DialOption that configures the ServerConn with specified TLS config
-// 
+//
 // If called together with the DialWithDialFunc option, the DialWithDialFunc function
 // will be used when dialing new connections but regardless of the function,
 // the connection will be treated as a TLS connection.
@@ -619,7 +619,8 @@ func (c *ServerConn) StorFrom(path string, r io.Reader, offset uint64) error {
 		return err
 	}
 
-	_, err = io.Copy(conn, r)
+	buf := make([]byte, 16*1024*1024) // Buffer size is 16MB
+	_, err = io.CopyBuffer(conn, r, buf)
 	conn.Close()
 	if err != nil {
 		return err
