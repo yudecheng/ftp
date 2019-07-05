@@ -619,7 +619,7 @@ func (c *ServerConn) StorFrom(path string, r io.Reader, offset uint64) error {
 		return err
 	}
 
-	buf := make([]byte, 16*1024*1024) // Buffer size is 16MB
+	buf := make([]byte, 1*1024*1024) // Buffer size is 1MB
 	_, err = io.CopyBuffer(conn, r, buf)
 	conn.Close()
 	if err != nil {
